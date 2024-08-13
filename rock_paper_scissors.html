@@ -23,14 +23,18 @@
       score.ties=0
     ">Reset Score</button>
     <script>
+      
+      let score = JSON.parse(localStorage.getItem('score')) || {
+        wins:0,
+        loss:0,
+        ties:0
+      };
+
       function playGame(playerMove) {
         const computerMove = pickComputerMove();
 
         let result = '';
 
-        let score ={
-
-        }
 
         if (playerMove === 'scissors') {
           if (computerMove === 'rock') {
@@ -60,8 +64,19 @@
           }
         }
 
+        if (result === 'You win.') {
+          score.wins += 1;
+        } else if (result === 'You lose.') {
+          score.loss += 1;
+        } else if (result === 'Tie.') {
+          score.ties += 1;
+        }
+
+        localStorage.setItem('score',JSON.stringify(score));
         alert(`You picked ${playerMove}. Computer picked ${computerMove}. ${result} Wins:${score.wins}, loss:${score.loss}, Ties:${score.ties}`);
       }
+
+      
 
       function pickComputerMove() {
         const randomNumber = Math.random();
